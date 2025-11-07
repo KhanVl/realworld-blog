@@ -1,6 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Header from "./components/Header";
+import NewArticlePage from "./pages/NewArticlePage";
+import EditArticlePage from "./pages/EditArticlePage";
 import ArticlesPage from "./pages/ArticlesPage";
 import ArticlePage from "./pages/ArticlePage";
 import SignInPage from "./pages/SignInPage";
@@ -36,6 +38,25 @@ function App() {
             <Route path="/" element={<Navigate to="/articles" replace />} />
             <Route path="/articles" element={<ArticlesPage />} />
             <Route path="/articles/:slug" element={<ArticlePage />} />
+
+            <Route
+              path="/new-article"
+              element={
+                <RequireAuth>
+                  <NewArticlePage />
+                </RequireAuth>
+              }
+            />
+
+            <Route
+              path="/articles/:slug/edit"
+              element={
+                <RequireAuth>
+                  <EditArticlePage />
+                </RequireAuth>
+              }
+            />
+
             <Route path="/sign-in" element={<SignInPage />} />
             <Route path="/sign-up" element={<SignUpPage />} />
             <Route

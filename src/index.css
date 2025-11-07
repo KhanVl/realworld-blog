@@ -167,6 +167,28 @@ a:hover {
     color: #AAAAAA;
 }
 
+.article-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.article-edit-btn,
+.article-delete-btn {
+    height: 32px;
+    padding: 0 12px;
+    border-radius: 4px;
+    border: 1px solid #48a868;
+    background: #fff;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.article-delete-btn {
+    border-color: #d9534f;
+    color: #d9534f;
+}
+
 .like-button {
     border: 1px solid #48a868;
     border-radius: 16px;
@@ -401,4 +423,72 @@ a:hover {
     margin-top: 16px;
     font-size: 14px;
     text-align: center;
+}
+
+.auth-textarea {
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    padding: 12px 16px;
+    font-size: 14px;
+    resize: vertical;
+    min-height: 160px;
+}
+
+.auth-textarea:focus {
+    outline: none;
+    border-color: #48a868;
+    box-shadow: 0 0 0 2px rgba(72, 168, 104, 0.2);
+}
+
+
+/* modal */
+
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+}
+
+.modal {
+    background: #fff;
+    border-radius: 4px;
+    padding: 24px 28px;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.modal-title {
+    margin: 0 0 8px;
+    font-size: 20px;
+}
+
+.modal-text {
+    margin: 0 0 16px;
+    font-size: 14px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.modal-btn {
+    min-width: 80px;
+    height: 32px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background: #f5f5f5;
+    cursor: pointer;
+}
+
+.modal-btn-danger {
+    border-color: #d9534f;
+    background: #d9534f;
+    color: #fff;
 }

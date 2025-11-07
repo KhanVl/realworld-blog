@@ -1,22 +1,53 @@
-const API_URL = "https://realworld.habsida.net/api";
+import { apiRequest } from "./client";
 
-export async function fetchArticles(page = 1, limit = 10) {
+export function fetchArticles(page = 1, limit = 10) {
     const offset = (page - 1) * limit;
-    const response = await fetch(`${API_URL}/articles?limit=${limit}&offset=${offset}`);
-
-    if (!response.ok) {
-        throw new Error(`Ошибка загрузки статей: ${response.status}`);
-    }
-
-    return response.json();
+    return apiRequest(`/articles?limit=${limit}&offset=${offset}`);
 }
 
-export async function fetchArticle(slug) {
-    const response = await fetch(`${API_URL}/articles/${slug}`);
+export function fetchArticle(slug) {
+    return apiRequest(`/articles/${slug}`);
+}
 
-    if (!response.ok) {
-        throw new Error(`Ошибка загрузки статьи: ${response.status}`);
-    }
+export function createArticle({ title, description, body, tagList }) {
+    return apiRequest(
+        "/articles", {
+            method: "POST",
+            body: JSON.stringify({
+                article: {
+                    title,
+                    description,
+                    body,
+                    tagList,
+                },
+            }),
+        },
+        true
+    );
+}
 
-    return response.json();
+export function updateArticle(slug, { title, description, body, tagList }) {
+    return apiRequest(
+        `/articles/${slug}`, {
+            method: "PUT",
+            body: JSON.stringify({
+                article: {
+                    title,
+                    description,
+                    body,
+                    tagList,
+                },
+            }),
+        },
+        true
+    );
+}
+
+export function deleteArticle(slug) {
+    return apiRequest(
+        `/articles/${slug}`, {
+            method: "DELETE",
+        },
+        true
+    );
 }
