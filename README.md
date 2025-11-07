@@ -5,8 +5,7 @@
 ## Live demo
 
 Развёрнуто на Vercel:  
-[https://realworld-blog-yourname.vercel.app](https://realworld-blog-d9u4.vercel.app/)
-
+https://realworld-blog-d9u4.vercel.app/
 ## Функциональность
 
 - Список статей с пагинацией
