@@ -9,7 +9,12 @@ const ConfirmModal = ({ open, title, text, onConfirm, onCancel, loading }) => {
         <h2 className="modal-title">{title}</h2>
         <p className="modal-text">{text}</p>
         <div className="modal-actions">
-          <button type="button" className="modal-btn" onClick={onCancel} disabled={loading}>
+          <button
+            type="button"
+            className="modal-btn"
+            onClick={onCancel}
+            disabled={loading}
+          >
             Cancel
           </button>
           <button

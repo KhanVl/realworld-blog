@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import Header from "./components/Header";
 import NewArticlePage from "./pages/NewArticlePage";
 import EditArticlePage from "./pages/EditArticlePage";
@@ -14,11 +19,7 @@ const RequireAuth = ({ children }) => {
   const { user, loadingAuth } = useAuth();
 
   if (loadingAuth) {
-    return (
-      <div className="container status">
-        Checking authentication...
-      </div>
-    );
+    return <div className="container status">Checking authentication...</div>;
   }
 
   if (!user) {

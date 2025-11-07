@@ -47,14 +47,21 @@ const SignUpPage = () => {
         Object.entries(serverErrors).forEach(([field, messages]) => {
           const msg = messages.join(", ");
 
-          if (field === "email" || field === "username" || field === "password") {
+          if (
+            field === "email" ||
+            field === "username" ||
+            field === "password"
+          ) {
             setError(field, { type: "server", message: msg });
           } else {
             setError("root", { type: "server", message: msg });
           }
         });
       } else {
-        setError("root", { type: "server", message: "Server error. Try again later." });
+        setError("root", {
+          type: "server",
+          message: "Server error. Try again later.",
+        });
       }
     }
   };
@@ -76,7 +83,9 @@ const SignUpPage = () => {
                 maxLength: { value: 20, message: "Max length is 20" },
               })}
             />
-            {errors.username && <p className="auth-error">{errors.username.message}</p>}
+            {errors.username && (
+              <p className="auth-error">{errors.username.message}</p>
+            )}
           </div>
 
           <div className="auth-field">
@@ -92,7 +101,9 @@ const SignUpPage = () => {
                 },
               })}
             />
-            {errors.email && <p className="auth-error">{errors.email.message}</p>}
+            {errors.email && (
+              <p className="auth-error">{errors.email.message}</p>
+            )}
           </div>
 
           <div className="auth-field">
@@ -106,7 +117,9 @@ const SignUpPage = () => {
                 maxLength: { value: 40, message: "Max length is 40" },
               })}
             />
-            {errors.password && <p className="auth-error">{errors.password.message}</p>}
+            {errors.password && (
+              <p className="auth-error">{errors.password.message}</p>
+            )}
           </div>
 
           <div className="auth-field">
@@ -138,10 +151,16 @@ const SignUpPage = () => {
             <p className="auth-error">{errors.acceptTerms.message}</p>
           )}
 
-          {errors.root && <p className="auth-error center">{errors.root.message}</p>}
+          {errors.root && (
+            <p className="auth-error center">{errors.root.message}</p>
+          )}
 
           <div className="auth-footer">
-            <button type="submit" className="auth-button" disabled={isSubmitting}>
+            <button
+              type="submit"
+              className="auth-button"
+              disabled={isSubmitting}
+            >
               {isSubmitting ? "Signing Up..." : "Sign Up"}
             </button>
           </div>

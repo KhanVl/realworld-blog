@@ -53,9 +53,15 @@ const ArticlesPage = () => {
 
       {!loading &&
         !error &&
-        articles.map((article) => <ArticleCard key={article.slug} article={article} />)}
+        articles.map((article) => (
+          <ArticleCard key={article.slug} article={article} />
+        ))}
 
-      <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={setPage}
+      />
     </div>
   );
 };

@@ -14,7 +14,9 @@ const ArticleForm = ({ initialValues, onSubmit, submitting }) => {
   return (
     <div className="container auth-container">
       <div className="auth-card">
-        <h1 className="auth-title">{initialValues.mode === "edit" ? "Edit Article" : "New Article"}</h1>
+        <h1 className="auth-title">
+          {initialValues.mode === "edit" ? "Edit Article" : "New Article"}
+        </h1>
 
         <form onSubmit={handleSubmit(onSubmit)} className="auth-form">
           <div className="auth-field">
@@ -26,7 +28,9 @@ const ArticleForm = ({ initialValues, onSubmit, submitting }) => {
                 required: "Title is required",
               })}
             />
-            {errors.title && <p className="auth-error">{errors.title.message}</p>}
+            {errors.title && (
+              <p className="auth-error">{errors.title.message}</p>
+            )}
           </div>
 
           <div className="auth-field">
@@ -38,7 +42,9 @@ const ArticleForm = ({ initialValues, onSubmit, submitting }) => {
                 required: "Description is required",
               })}
             />
-            {errors.description && <p className="auth-error">{errors.description.message}</p>}
+            {errors.description && (
+              <p className="auth-error">{errors.description.message}</p>
+            )}
           </div>
 
           <div className="auth-field">

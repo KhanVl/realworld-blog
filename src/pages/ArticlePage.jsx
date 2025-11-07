@@ -2,7 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { fetchArticle, deleteArticle } from "../api/articles";
+import {
+  fetchArticle,
+  deleteArticle,
+  favoriteArticle,
+  unfavoriteArticle,
+} from "../api/articles";
 import { useAuth } from "../AuthContext";
 import ConfirmModal from "../components/ConfirmModal";
 
@@ -17,6 +22,7 @@ const ArticlePage = () => {
 
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [liking, setLiking] = useState(false);
 
   useEffect(() => {
     let isCancelled = false;
@@ -60,8 +66,36 @@ const ArticlePage = () => {
     }
   };
 
-  if (loading) return <div className="container status">Loading article...</div>;
-  if (error) return <div className="container status status-error">{error}</div>;
+  const handleToggleLike = async () => {
+    if (!user) {
+      navigate("/sign-in");
+      return;
+    }
+
+    if (!article) return;
+
+    setLiking(true);
+    try {
+      let data;
+      if (article.favorited) {
+        data = await unfavoriteArticle(slug);
+      } else {
+        data = await favoriteArticle(slug);
+      }
+
+      setArticle(data.article);
+    } catch (err) {
+      console.error("Like article error", err);
+      alert("Failed to update like status.");
+    } finally {
+      setLiking(false);
+    }
+  };
+
+  if (loading)
+    return <div className="container status">Loading article...</div>;
+  if (error)
+    return <div className="container status status-error">{error}</div>;
   if (!article) return null;
 
   const date = new Date(article.createdAt).toLocaleDateString("en-GB", {
@@ -89,7 +123,12 @@ const ArticlePage = () => {
           </div>
 
           <div className="article-actions">
-            <button className="like-button" disabled>
+            <button
+              className={`like-button ${article.favorited ? "liked" : ""}`}
+              type="button"
+              disabled={liking}
+              onClick={handleToggleLike}
+            >
               ❤ <span>{article.favoritesCount}</span>
             </button>
 

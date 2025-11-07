@@ -51,7 +51,12 @@ const ProfilePage = () => {
         Object.entries(serverErrors).forEach(([field, messages]) => {
           const msg = messages.join(", ");
 
-          if (field === "email" || field === "username" || field === "password" || field === "image") {
+          if (
+            field === "email" ||
+            field === "username" ||
+            field === "password" ||
+            field === "image"
+          ) {
             const formField = field === "password" ? "newPassword" : field;
             setError(formField, { type: "server", message: msg });
           } else {
@@ -59,7 +64,10 @@ const ProfilePage = () => {
           }
         });
       } else {
-        setError("root", { type: "server", message: "Server error. Try again later." });
+        setError("root", {
+          type: "server",
+          message: "Server error. Try again later.",
+        });
       }
     }
   };
@@ -79,7 +87,9 @@ const ProfilePage = () => {
                 required: "Username is required",
               })}
             />
-            {errors.username && <p className="auth-error">{errors.username.message}</p>}
+            {errors.username && (
+              <p className="auth-error">{errors.username.message}</p>
+            )}
           </div>
 
           <div className="auth-field">
@@ -95,7 +105,9 @@ const ProfilePage = () => {
                 },
               })}
             />
-            {errors.email && <p className="auth-error">{errors.email.message}</p>}
+            {errors.email && (
+              <p className="auth-error">{errors.email.message}</p>
+            )}
           </div>
 
           <div className="auth-field">
@@ -120,19 +132,26 @@ const ProfilePage = () => {
               className="auth-input"
               {...register("image", {
                 pattern: {
-                  value:
-                    /^(https?:\/\/)?([\w\-])+\.{1}([a-zA-Z]{2,63})([\/\w\-]*)*\/?(\.[a-zA-Z]{2,4})?$/,
+                  value: /^https?:\/\/\S+$/i,
                   message: "Invalid URL",
                 },
               })}
             />
-            {errors.image && <p className="auth-error">{errors.image.message}</p>}
+            {errors.image && (
+              <p className="auth-error">{errors.image.message}</p>
+            )}
           </div>
 
-          {errors.root && <p className="auth-error center">{errors.root.message}</p>}
+          {errors.root && (
+            <p className="auth-error center">{errors.root.message}</p>
+          )}
 
           <div className="auth-footer">
-            <button type="submit" className="auth-button" disabled={isSubmitting}>
+            <button
+              type="submit"
+              className="auth-button"
+              disabled={isSubmitting}
+            >
               {isSubmitting ? "Saving..." : "Save"}
             </button>
           </div>

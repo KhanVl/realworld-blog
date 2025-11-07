@@ -11,7 +11,10 @@ const NewArticlePage = () => {
     setSubmitting(true);
     try {
       const tagList = values.tags
-        ? values.tags.split(",").map((t) => t.trim()).filter(Boolean)
+        ? values.tags
+            .split(",")
+            .map((t) => t.trim())
+            .filter(Boolean)
         : [];
 
       const data = await createArticle({
@@ -32,7 +35,13 @@ const NewArticlePage = () => {
 
   return (
     <ArticleForm
-      initialValues={{ mode: "create", title: "", description: "", body: "", tags: "" }}
+      initialValues={{
+        mode: "create",
+        title: "",
+        description: "",
+        body: "",
+        tags: "",
+      }}
       onSubmit={handleSubmit}
       submitting={submitting}
     />

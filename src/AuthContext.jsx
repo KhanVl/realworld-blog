@@ -1,6 +1,12 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { getAuthToken, setAuthToken } from "./api/client";
-import { getCurrentUser, loginUser, registerUser, updateUser } from "./api/auth";
+import {
+  getCurrentUser,
+  loginUser,
+  registerUser,
+  updateUser,
+} from "./api/auth";
 
 const AuthContext = createContext(null);
 
@@ -48,12 +54,12 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
-   const updateProfile = async (payload) => {
+  const updateProfile = async (payload) => {
     const data = await updateUser(payload);
 
     const newToken = data.user.token;
     if (newToken) {
-      setAuthToken(newToken); 
+      setAuthToken(newToken);
     }
 
     setUser(data.user);

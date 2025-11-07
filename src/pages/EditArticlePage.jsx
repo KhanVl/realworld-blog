@@ -50,7 +50,10 @@ const EditArticlePage = () => {
     setSubmitting(true);
     try {
       const tagList = values.tags
-        ? values.tags.split(",").map((t) => t.trim()).filter(Boolean)
+        ? values.tags
+            .split(",")
+            .map((t) => t.trim())
+            .filter(Boolean)
         : [];
 
       const data = await updateArticle(slug, {
@@ -70,11 +73,7 @@ const EditArticlePage = () => {
   };
 
   if (loading || !initialValues) {
-    return (
-      <div className="container status">
-        Loading article...
-      </div>
-    );
+    return <div className="container status">Loading article...</div>;
   }
 
   return (

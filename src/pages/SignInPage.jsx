@@ -28,7 +28,10 @@ const SignInPage = () => {
 
       if (serverErrors?.["email or password"]) {
         const message = serverErrors["email or password"].join(", ");
-        setError("root", { type: "server", message: message || "Email or password is invalid" });
+        setError("root", {
+          type: "server",
+          message: message || "Email or password is invalid",
+        });
       } else {
         setError("root", {
           type: "server",
@@ -57,7 +60,9 @@ const SignInPage = () => {
                 },
               })}
             />
-            {errors.email && <p className="auth-error">{errors.email.message}</p>}
+            {errors.email && (
+              <p className="auth-error">{errors.email.message}</p>
+            )}
           </div>
 
           <div className="auth-field">
@@ -69,7 +74,9 @@ const SignInPage = () => {
                 required: "Password is required",
               })}
             />
-            {errors.password && <p className="auth-error">{errors.password.message}</p>}
+            {errors.password && (
+              <p className="auth-error">{errors.password.message}</p>
+            )}
           </div>
 
           {errors.root && (
@@ -77,7 +84,11 @@ const SignInPage = () => {
           )}
 
           <div className="auth-footer">
-            <button type="submit" className="auth-button" disabled={isSubmitting}>
+            <button
+              type="submit"
+              className="auth-button"
+              disabled={isSubmitting}
+            >
               {isSubmitting ? "Signing In..." : "Sign In"}
             </button>
           </div>
