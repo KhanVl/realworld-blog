@@ -10,12 +10,15 @@ const EditArticlePage = () => {
   const [initialValues, setInitialValues] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [serverErrors, setServerErrors] = useState(null);
 
   useEffect(() => {
     let cancelled = false;
 
     const loadArticle = async () => {
       setLoading(true);
+      setServerErrors(null);
+
       try {
         const data = await fetchArticle(slug);
         if (cancelled) return;
@@ -30,9 +33,11 @@ const EditArticlePage = () => {
           tags: article.tagList?.join(", ") || "",
         });
       } catch (error) {
-        console.error("Load article error", error);
         if (!cancelled) {
-          alert("Failed to load article");
+          console.error("Load article error", error);
+          setServerErrors({
+            _global: ["Failed to load article. Please try again."],
+          });
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -48,6 +53,8 @@ const EditArticlePage = () => {
 
   const handleSubmit = async (values) => {
     setSubmitting(true);
+    setServerErrors(null);
+
     try {
       const tagList = values.tags
         ? values.tags
@@ -66,14 +73,26 @@ const EditArticlePage = () => {
       navigate(`/articles/${data.article.slug}`);
     } catch (error) {
       console.error("Update article error", error);
-      alert("Failed to update article. Please try again.");
+      const apiErrors = error?.data?.errors;
+
+      if (apiErrors) {
+        setServerErrors(apiErrors);
+      } else {
+        setServerErrors({
+          _global: ["Failed to update article. Please try again."],
+        });
+      }
     } finally {
       setSubmitting(false);
     }
   };
 
   if (loading || !initialValues) {
-    return <div className="container status">Loading article...</div>;
+    return (
+      <div className="container status">
+        Loading article...
+      </div>
+    );
   }
 
   return (
@@ -81,6 +100,7 @@ const EditArticlePage = () => {
       initialValues={initialValues}
       onSubmit={handleSubmit}
       submitting={submitting}
+      serverErrors={serverErrors}
     />
   );
 };

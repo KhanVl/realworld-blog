@@ -1,8 +1,7 @@
-// src/components/ArticleForm.jsx
 import React from "react";
 import { useForm } from "react-hook-form";
 
-const ArticleForm = ({ initialValues, onSubmit, submitting }) => {
+const ArticleForm = ({ initialValues, onSubmit, submitting, serverErrors = {} }) => {
   const {
     register,
     handleSubmit,
@@ -10,6 +9,8 @@ const ArticleForm = ({ initialValues, onSubmit, submitting }) => {
   } = useForm({
     defaultValues: initialValues,
   });
+
+  const fieldServerErrors = serverErrors || {};
 
   return (
     <div className="container auth-container">
@@ -28,8 +29,11 @@ const ArticleForm = ({ initialValues, onSubmit, submitting }) => {
                 required: "Title is required",
               })}
             />
-            {errors.title && (
-              <p className="auth-error">{errors.title.message}</p>
+            {errors.title && <p className="auth-error">{errors.title.message}</p>}
+            {fieldServerErrors.title && (
+              <p className="auth-error">
+                {fieldServerErrors.title.join(", ")}
+              </p>
             )}
           </div>
 
@@ -45,8 +49,14 @@ const ArticleForm = ({ initialValues, onSubmit, submitting }) => {
             {errors.description && (
               <p className="auth-error">{errors.description.message}</p>
             )}
+            {fieldServerErrors.description && (
+              <p className="auth-error">
+                {fieldServerErrors.description.join(", ")}
+              </p>
+            )}
           </div>
 
+          {/* Body */}
           <div className="auth-field">
             <textarea
               placeholder="Body"
@@ -57,6 +67,11 @@ const ArticleForm = ({ initialValues, onSubmit, submitting }) => {
               })}
             />
             {errors.body && <p className="auth-error">{errors.body.message}</p>}
+            {fieldServerErrors.body && (
+              <p className="auth-error">
+                {fieldServerErrors.body.join(", ")}
+              </p>
+            )}
           </div>
 
           <div className="auth-field">
@@ -67,6 +82,16 @@ const ArticleForm = ({ initialValues, onSubmit, submitting }) => {
               {...register("tags")}
             />
           </div>
+
+          {fieldServerErrors._global && (
+            <div className="auth-error-list">
+              {fieldServerErrors._global.map((msg, idx) => (
+                <p key={idx} className="auth-error">
+                  {msg}
+                </p>
+              ))}
+            </div>
+          )}
 
           <div className="auth-footer">
             <button type="submit" className="auth-button" disabled={submitting}>
