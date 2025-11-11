@@ -525,3 +525,8 @@ a:hover {
 .auth-error-list {
     margin-bottom: 12px;
 }
+
+.auth-error-server {
+    margin-top: 4px;
+    text-align: left;
+}

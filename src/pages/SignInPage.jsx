@@ -1,10 +1,10 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, Navigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 
 const SignInPage = () => {
-  const { signIn } = useAuth();
+  const { signIn, user } = useAuth();
   const navigate = useNavigate();
 
   const {
@@ -19,13 +19,20 @@ const SignInPage = () => {
     },
   });
 
+  // если уже залогинен – нет смысла показывать логин
+  if (user) {
+    return <Navigate to="/articles" replace />;
+  }
+
   const onSubmit = async (values) => {
     try {
       await signIn(values);
       navigate("/articles");
     } catch (error) {
+      console.error("Login error", error);
       const serverErrors = error.data?.errors;
 
+      // RealWorld API обычно отдаёт { "email or password": ["is invalid"] }
       if (serverErrors?.["email or password"]) {
         const message = serverErrors["email or password"].join(", ");
         setError("root", {
@@ -47,6 +54,7 @@ const SignInPage = () => {
         <h1 className="auth-title">Sign In</h1>
 
         <form onSubmit={handleSubmit(onSubmit)} className="auth-form">
+          {/* Email */}
           <div className="auth-field">
             <input
               type="email"
@@ -65,6 +73,7 @@ const SignInPage = () => {
             )}
           </div>
 
+          {/* Password */}
           <div className="auth-field">
             <input
               type="password"
@@ -79,6 +88,7 @@ const SignInPage = () => {
             )}
           </div>
 
+          {/* Ошибка с сервера */}
           {errors.root && (
             <p className="auth-error center">{errors.root.message}</p>
           )}
