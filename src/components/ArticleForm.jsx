@@ -1,7 +1,12 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 
-const ArticleForm = ({ initialValues, onSubmit, submitting, serverErrors = {} }) => {
+const ArticleForm = ({
+  initialValues,
+  onSubmit,
+  submitting,
+  serverErrors = {},
+}) => {
   const {
     register,
     handleSubmit,
@@ -29,11 +34,11 @@ const ArticleForm = ({ initialValues, onSubmit, submitting, serverErrors = {} })
                 required: "Title is required",
               })}
             />
-            {errors.title && <p className="auth-error">{errors.title.message}</p>}
+            {errors.title && (
+              <p className="auth-error">{errors.title.message}</p>
+            )}
             {fieldServerErrors.title && (
-              <p className="auth-error">
-                {fieldServerErrors.title.join(", ")}
-              </p>
+              <p className="auth-error">{fieldServerErrors.title.join(", ")}</p>
             )}
           </div>
 
@@ -68,9 +73,7 @@ const ArticleForm = ({ initialValues, onSubmit, submitting, serverErrors = {} })
             />
             {errors.body && <p className="auth-error">{errors.body.message}</p>}
             {fieldServerErrors.body && (
-              <p className="auth-error">
-                {fieldServerErrors.body.join(", ")}
-              </p>
+              <p className="auth-error">{fieldServerErrors.body.join(", ")}</p>
             )}
           </div>
 

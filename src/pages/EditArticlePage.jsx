@@ -88,11 +88,7 @@ const EditArticlePage = () => {
   };
 
   if (loading || !initialValues) {
-    return (
-      <div className="container status">
-        Loading article...
-      </div>
-    );
+    return <div className="container status">Loading article...</div>;
   }
 
   return (
