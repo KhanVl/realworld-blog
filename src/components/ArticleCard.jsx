@@ -1,22 +1,48 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { favoriteArticle, unfavoriteArticle } from "../api/articles";
+import { useAuth } from "../AuthContext";
 
 const ArticleCard = ({ article }) => {
-  const {
-    slug,
-    title,
-    description,
-    tagList,
-    favoritesCount,
-    author,
-    createdAt,
-  } = article;
+  const navigate = useNavigate();
+  const { user } = useAuth();
+
+  const { slug, title, description, tagList, author, createdAt } = article;
+
+  const [favorited, setFavorited] = useState(article.favorited ?? false);
+  const [favoritesCount, setFavoritesCount] = useState(
+    article.favoritesCount ?? 0,
+  );
+  const [liking, setLiking] = useState(false);
 
   const date = new Date(createdAt).toLocaleDateString("en-GB", {
     day: "2-digit",
     month: "long",
     year: "numeric",
   });
+
+  const handleToggleLike = async (e) => {
+    e.stopPropagation();
+
+    if (!user) {
+      navigate("/sign-in");
+      return;
+    }
+
+    setLiking(true);
+    try {
+      const data = favorited
+        ? await unfavoriteArticle(slug)
+        : await favoriteArticle(slug);
+
+      setFavorited(data.article.favorited);
+      setFavoritesCount(data.article.favoritesCount);
+    } catch (err) {
+      console.error("Like article error", err);
+    } finally {
+      setLiking(false);
+    }
+  };
 
   return (
     <article className="article-card">
@@ -42,7 +68,12 @@ const ArticleCard = ({ article }) => {
           </div>
         </div>
 
-        <button className="like-button" disabled>
+        <button
+          type="button"
+          className={`like-button ${favorited ? "liked" : ""}`}
+          disabled={liking}
+          onClick={handleToggleLike}
+        >
           <div className="like-button-icon">
             <svg
               width="14"

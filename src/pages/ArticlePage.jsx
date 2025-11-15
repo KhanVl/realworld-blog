@@ -25,43 +25,37 @@ const ArticlePage = () => {
   const [liking, setLiking] = useState(false);
 
   useEffect(() => {
-    let isCancelled = false;
+    let cancelled = false;
 
-    const loadArticle = async () => {
+    const load = async () => {
       setLoading(true);
       setError("");
-
       try {
         const data = await fetchArticle(slug);
-        if (!isCancelled) {
-          setArticle(data.article);
-        }
-      } catch (err) {
-        if (!isCancelled) setError(err.message || "Failed to load article");
+        if (!cancelled) setArticle(data.article);
+      } catch {
+        if (!cancelled) setError("Failed to load article");
       } finally {
-        if (!isCancelled) setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
 
-    loadArticle();
-
+    load();
     return () => {
-      isCancelled = true;
+      cancelled = true;
     };
   }, [slug]);
 
-  const handleEdit = () => {
-    navigate(`/articles/${slug}/edit`);
-  };
+  const handleEdit = () => navigate(`/articles/${slug}/edit`);
 
   const handleDelete = async () => {
     setDeleting(true);
+    setError("");
     try {
       await deleteArticle(slug);
       navigate("/articles");
-    } catch (err) {
-      console.error("Delete article error", err);
-      alert("Failed to delete article.");
+    } catch {
+      setError("Failed to delete article. Please try again.");
       setDeleting(false);
     }
   };
@@ -71,30 +65,25 @@ const ArticlePage = () => {
       navigate("/sign-in");
       return;
     }
-
     if (!article) return;
 
     setLiking(true);
+    setError("");
     try {
-      let data;
-      if (article.favorited) {
-        data = await unfavoriteArticle(slug);
-      } else {
-        data = await favoriteArticle(slug);
-      }
-
+      const data = article.favorited
+        ? await unfavoriteArticle(slug)
+        : await favoriteArticle(slug);
       setArticle(data.article);
-    } catch (err) {
-      console.error("Like article error", err);
-      alert("Failed to update like status.");
+    } catch {
+      setError("Failed to update like status.");
     } finally {
       setLiking(false);
     }
   };
 
-  if (loading)
+  if (loading && !article)
     return <div className="container status">Loading article...</div>;
-  if (error)
+  if (error && !article)
     return <div className="container status status-error">{error}</div>;
   if (!article) return null;
 
@@ -111,6 +100,12 @@ const ArticlePage = () => {
       <Link to="/articles" className="back-link">
         ← Back to articles
       </Link>
+
+      {error && (
+        <div className="status status-error" style={{ marginBottom: 16 }}>
+          {error}
+        </div>
+      )}
 
       <div className="article-card">
         <div className="article-card-header">

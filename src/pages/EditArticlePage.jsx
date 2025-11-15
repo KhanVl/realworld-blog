@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import ArticleForm from "../components/ArticleForm";
 import { fetchArticle, updateArticle } from "../api/articles";
 
@@ -9,43 +9,37 @@ const EditArticlePage = () => {
 
   const [initialValues, setInitialValues] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(""); // <-- отдельное состояние ошибки загрузки
   const [submitting, setSubmitting] = useState(false);
-  const [serverErrors, setServerErrors] = useState(null);
+  const [serverErrors, setServerErrors] = useState(null); // ошибки валидации при сабмите
 
   useEffect(() => {
     let cancelled = false;
 
-    const loadArticle = async () => {
+    const load = async () => {
       setLoading(true);
-      setServerErrors(null);
-
+      setLoadError("");
       try {
         const data = await fetchArticle(slug);
         if (cancelled) return;
-
-        const article = data.article;
+        const a = data.article;
 
         setInitialValues({
           mode: "edit",
-          title: article.title,
-          description: article.description,
-          body: article.body,
-          tags: article.tagList?.join(", ") || "",
+          title: a.title,
+          description: a.description,
+          body: a.body,
+          tags: a.tagList?.join(", ") || "",
         });
-      } catch (error) {
-        if (!cancelled) {
-          console.error("Load article error", error);
-          setServerErrors({
-            _global: ["Failed to load article. Please try again."],
-          });
-        }
+      } catch {
+        if (!cancelled)
+          setLoadError("Failed to load article. Please try again.");
       } finally {
         if (!cancelled) setLoading(false);
       }
     };
 
-    loadArticle();
-
+    load();
     return () => {
       cancelled = true;
     };
@@ -71,25 +65,36 @@ const EditArticlePage = () => {
       });
 
       navigate(`/articles/${data.article.slug}`);
-    } catch (error) {
-      console.error("Update article error", error);
-      const apiErrors = error?.data?.errors;
-
-      if (apiErrors) {
-        setServerErrors(apiErrors);
-      } else {
-        setServerErrors({
+    } catch (e) {
+      const apiErrors = e?.data?.errors;
+      setServerErrors(
+        apiErrors || {
           _global: ["Failed to update article. Please try again."],
-        });
-      }
+        },
+      );
     } finally {
       setSubmitting(false);
     }
   };
 
-  if (loading || !initialValues) {
+  if (loading && !loadError) {
     return <div className="container status">Loading article...</div>;
   }
+
+  if (loadError) {
+    return (
+      <div className="container status status-error">
+        <p>{loadError}</p>
+        <p style={{ marginTop: 12 }}>
+          <Link to="/articles" className="back-link">
+            ← Back to articles
+          </Link>
+        </p>
+      </div>
+    );
+  }
+
+  if (!initialValues) return null;
 
   return (
     <ArticleForm
